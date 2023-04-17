@@ -4,10 +4,12 @@ import {
   type NextAuthOptions,
   type DefaultSession,
 } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
+import GoogleProvider from "next-auth/providers/google";
+import GithubProvider from "next-auth/providers/github";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
+import { User } from "@prisma/client";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -17,11 +19,7 @@ import { prisma } from "~/server/db";
  */
 declare module "next-auth" {
   interface Session extends DefaultSession {
-    user: {
-      id: string;
-      // ...other properties
-      // role: UserRole;
-    } & DefaultSession["user"];
+    user: User;
   }
 
   // interface User {
@@ -37,19 +35,47 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: async ({ session, user }) => {
+      const userData = await prisma.user.findFirst({
+        where: {
+          id: user.id,
+        },
+      });
+
+      if (userData?.firstLogin) {
+        await prisma.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            firstLogin: false,
+          },
+        });
+        await prisma.notification.create({
+          data: {
+            content: `Welcome ${user?.name}`,
+            userId: user?.id as string,
+          },
+        });
+      }
+
+      return {
+        ...session,
+        user: {
+          ...userData,
+        },
+      };
+    },
   },
   adapter: PrismaAdapter(prisma),
   providers: [
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    }),
+    GithubProvider({
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
     }),
     /**
      * ...add more providers here.
