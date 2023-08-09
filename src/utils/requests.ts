@@ -45,4 +45,8 @@ export default {
     title: "TV Movie",
     url: `/discover/movie?api_key=${API_KEY}&with_genres=10770`,
   },
+  fetchMovieById: {
+    title: "TV Movie",
+    url: `/movie/movieId/?api_key=${API_KEY}&language=en-US`,
+  },
 };

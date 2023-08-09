@@ -22,10 +22,12 @@ declare module "next-auth" {
     user: User;
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    // ...other properties
+    // role: UserRole;
+    firstLogin: boolean;
+    myListIds: string;
+  }
 }
 
 /**
@@ -36,13 +38,7 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     session: async ({ session, user }) => {
-      const userData = await prisma.user.findFirst({
-        where: {
-          id: user.id,
-        },
-      });
-
-      if (userData?.firstLogin) {
+      if (user?.firstLogin) {
         await prisma.user.update({
           where: {
             id: user.id,
@@ -62,7 +58,7 @@ export const authOptions: NextAuthOptions = {
       return {
         ...session,
         user: {
-          ...userData,
+          ...user,
         },
       };
     },

@@ -8,10 +8,34 @@ import MobileBottomBar from "~/components/mobileBottomBar/MobileBottomBar";
 import ResutsRow from "~/components/resultsRow/ResultsRow";
 import requests from "~/utils/requests";
 
-const Home: NextPage = ({ highlighted, trending }: any) => {
-  const BASE_URL = "https://image.tmdb.org/t/p/original/";
+const apiUrl = "https://api.themoviedb.org/3";
+
+const Home: NextPage = ({
+  highlighted,
+  trending,
+  action,
+  comedy,
+  horror,
+  fetchMovieById,
+}: any) => {
+  const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original/";
   const user = useSession().data?.user;
-  console.log(user);
+  const [myList, setMyList] = React.useState([]);
+  const [myListIds, setMyListIds] = React.useState(
+    JSON.parse(user?.myListIds as string)
+  );
+
+  React.useEffect(() => {
+    let tempMyListItems: any[] = [];
+    myListIds.map(async (item: string) => {
+      const data = await fetch(
+        (fetchMovieById as string).replace("movieId", item)
+      ).then((result) => result.json());
+      console.log(data);
+    });
+  }, [myListIds]);
+
+  console.log(myList);
   return (
     <>
       <Head>
@@ -41,13 +65,15 @@ const Home: NextPage = ({ highlighted, trending }: any) => {
           </div>
           <img
             className="-z-50 h-full w-full object-cover"
-            src={`${BASE_URL}${highlighted?.backdrop_path}`}
+            src={`${BASE_IMAGE_URL}${highlighted?.backdrop_path}`}
           />
         </section>
-        <section className="mt-[-10vh] flex flex-col space-y-10 overflow-y-hidden md:mt-[-7vh]">
-          <ResutsRow results={trending} />
-          <ResutsRow results={trending} />
-          <ResutsRow results={trending} />
+        <section className="mb-40 mt-[-10vh] flex flex-col space-y-10 overflow-y-hidden md:mt-[-7vh]">
+          <ResutsRow title="Trending" results={trending} />
+          <ResutsRow title="Comedy" results={comedy} />
+          <ResutsRow title="Action" results={action} />
+          <ResutsRow title="Horror" results={horror} />
+          <ResutsRow isMyList title="My List" />
         </section>
         <MobileBottomBar />
       </main>
@@ -59,17 +85,35 @@ export default Home;
 
 export async function getServerSideProps() {
   const highlighted = await fetch(
-    `https://api.themoviedb.org/3${requests.highlightedMovie.url}`
+    `${apiUrl}${requests.highlightedMovie.url}`
   ).then((res) => res.json());
 
-  const trending = await fetch(
-    `https://api.themoviedb.org/3${requests.fetchTrending.url}`
-  ).then((res) => res.json());
+  const trending = await fetch(`${apiUrl}${requests.fetchTrending.url}`).then(
+    (res) => res.json()
+  );
+
+  const comedy = await fetch(`${apiUrl}${requests.fetchComedyMovies.url}`).then(
+    (res) => res.json()
+  );
+
+  const action = await fetch(`${apiUrl}${requests.fetchActionMovies.url}`).then(
+    (res) => res.json()
+  );
+
+  const horror = await fetch(`${apiUrl}${requests.fetchHorrorMovies.url}`).then(
+    (res) => res.json()
+  );
+
+  const fetchMovieById = requests.fetchMovieById.url;
 
   return {
     props: {
-      highlighted: highlighted.results[6],
+      highlighted: highlighted.results[0],
       trending: trending.results,
+      comedy: comedy.results,
+      action: action.results,
+      horror: horror.results,
+      fetchMovieById: fetchMovieById,
     },
   };
 }

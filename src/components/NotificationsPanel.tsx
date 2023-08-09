@@ -7,15 +7,15 @@ import prisma from "~/utils/prismaClient";
 
 const NotificationsPanel: React.FC = () => {
   const user = useSession().data?.user;
+  const { data: notificationData, refetch: refetchNotificationData } =
+    api.notification.getNotificationsByUserId.useQuery({
+      userId: user?.id as string,
+    });
   const [notificationsSeen, setNotificationsSeen] =
     React.useState<boolean>(true);
   const { mutate: notificationMutate } = api.notification.create.useMutation();
   const { mutate: setAllNotificationsToSeenMutate } =
     api.notification.allNotificationByUserIdSeen.useMutation();
-  const { data: notificationData, refetch: refetchNotificationData } =
-    api.notification.getNotificationsByUserId.useQuery({
-      userId: user?.id as string,
-    });
   const { mutate: userFirstLoginMutate } =
     api.user.updateFirstLogin.useMutation();
 
@@ -79,7 +79,9 @@ const NotificationsPanel: React.FC = () => {
                         >
                           {!item.seen ? (
                             <div className="h-[6px] w-[6px] rounded-full bg-red-600"></div>
-                          ) : null}
+                          ) : (
+                            <div className="h-[6px] w-[6px] rounded-full bg-zinc-600/20"></div>
+                          )}
                           <span className="text-xl md:text-lg">
                             {item.content}
                           </span>

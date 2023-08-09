@@ -57,6 +57,7 @@ model User {
     accounts        Account[]
     sessions        Session[]
     firstLogin      Boolean   @default(true)
+    myListIds       String    @default("[]")
 }
 
 model Notification {

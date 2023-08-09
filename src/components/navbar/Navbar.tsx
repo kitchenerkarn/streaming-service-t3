@@ -23,7 +23,7 @@ const Navbar: React.FC = () => {
   return (
     <nav
       className={`fixed top-0 z-50 flex h-[70px] w-screen items-center justify-center px-16 transition duration-200 md:justify-between ${
-        showBackground ? "bg-[#181818]/95 backdrop-blur" : ""
+        showBackground ? "bg-[#181818]/95 backdrop-blur" : " bg-transparent"
       }`}
     >
       <ul className="flex h-full items-center space-x-10">
@@ -40,6 +40,11 @@ const Navbar: React.FC = () => {
         <li>
           <Link className="font text-lg text-zinc-200" href="#">
             Series
+          </Link>
+        </li>
+        <li>
+          <Link className="font text-lg text-zinc-200" href="/mylist">
+            My List
           </Link>
         </li>
       </ul>

@@ -3,10 +3,16 @@ import ResultCard from "./ResultCard";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 
 interface ResultsRowProps extends React.HTMLAttributes<HTMLElement> {
-  results: any;
+  results?: any;
+  title: string;
+  isMyList?: boolean;
 }
 
-const ResutsRow: React.FC<ResultsRowProps> = ({ results }) => {
+const ResutsRow: React.FC<ResultsRowProps> = ({
+  results,
+  title,
+  isMyList = false,
+}) => {
   const resultsRef = React.useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = React.useState(false);
   const [showRightArrow, setShowRightArrow] = React.useState(true);
@@ -24,9 +30,7 @@ const ResutsRow: React.FC<ResultsRowProps> = ({ results }) => {
 
   return (
     <div className="relative flex w-full flex-col space-y-1">
-      <span className="px-8 text-xl font-semibold md:px-16">
-        Latest Releases
-      </span>
+      <span className="px-8 text-xl font-semibold md:px-16">{title}</span>
       <div
         className={` absolute left-0 top-0 z-10 hidden h-full items-end py-5 transition ${
           showLeftArrow ? "md:flex" : "md:hidden"
@@ -54,6 +58,7 @@ const ResutsRow: React.FC<ResultsRowProps> = ({ results }) => {
         {results?.map((item: any) => {
           return <ResultCard data={item} />;
         })}
+        {!results ? <ResultCard isMyListPlaceholder={isMyList} /> : null}
       </div>
       <div
         className={`absolute right-0 top-0 z-10 hidden h-full items-end py-5 ${

@@ -26,3 +26,14 @@ You can check out the [create-t3-app GitHub repository](https://github.com/t3-os
 ## How do I deploy this?
 
 Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+
+## TODO
+
+[ ]: Landing page.  
+[ ]: Sign in as guest option.
+[ ]: Gradient behind hero section to make featured listing header more visable.
+[ ]: My list working.
+[ ]: Hover over listing with ability to add to My List.
+[ ]: Ability to click on listing and get more information / preview trailer.
+[ ]: User setting modal.
+[ ]: Allow to user to expand home page section and open full category on it's own page.
