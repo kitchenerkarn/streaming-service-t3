@@ -1,41 +1,30 @@
-import { type NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { InferGetServerSidePropsType } from "next";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
 import React from "react";
 import Navbar from "~/components/navbar/Navbar";
 import MobileBottomBar from "~/components/mobileBottomBar/MobileBottomBar";
 import ResutsRow from "~/components/resultsRow/ResultsRow";
-import requests from "~/utils/requests";
+import { MovieItemType } from "~/types";
 
-const apiUrl = "https://api.themoviedb.org/3";
+interface getServerSidePropsDataType {
+  highlighted: MovieItemType[];
+  trending: MovieItemType[];
+  action: MovieItemType[];
+  comedy: MovieItemType[];
+  horror: MovieItemType[];
+}
 
-const Home: NextPage = ({
+const Home = ({
   highlighted,
   trending,
   action,
   comedy,
   horror,
-  fetchMovieById,
-}: any) => {
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original/";
-  const user = useSession().data?.user;
-  const [myList, setMyList] = React.useState([]);
-  const [myListIds, setMyListIds] = React.useState(
-    JSON.parse(user?.myListIds as string)
-  );
+  console.log(highlighted);
 
-  React.useEffect(() => {
-    let tempMyListItems: any[] = [];
-    myListIds.map(async (item: string) => {
-      const data = await fetch(
-        (fetchMovieById as string).replace("movieId", item)
-      ).then((result) => result.json());
-      console.log(data);
-    });
-  }, [myListIds]);
-
-  console.log(myList);
   return (
     <>
       <Head>
@@ -73,7 +62,7 @@ const Home: NextPage = ({
           <ResutsRow title="Comedy" results={comedy} />
           <ResutsRow title="Action" results={action} />
           <ResutsRow title="Horror" results={horror} />
-          <ResutsRow isMyList title="My List" />
+          {/* <ResutsRow isMyList title="My List" /> */}
         </section>
         <MobileBottomBar />
       </main>
@@ -84,36 +73,23 @@ const Home: NextPage = ({
 export default Home;
 
 export async function getServerSideProps() {
-  const highlighted = await fetch(
-    `${apiUrl}${requests.highlightedMovie.url}`
+  const {
+    highlighted,
+    trending,
+    comedy,
+    action,
+    horror,
+  }: getServerSidePropsDataType = await fetch(
+    `${process.env.NEXTAUTH_URL}/api/fetchCategories`
   ).then((res) => res.json());
-
-  const trending = await fetch(`${apiUrl}${requests.fetchTrending.url}`).then(
-    (res) => res.json()
-  );
-
-  const comedy = await fetch(`${apiUrl}${requests.fetchComedyMovies.url}`).then(
-    (res) => res.json()
-  );
-
-  const action = await fetch(`${apiUrl}${requests.fetchActionMovies.url}`).then(
-    (res) => res.json()
-  );
-
-  const horror = await fetch(`${apiUrl}${requests.fetchHorrorMovies.url}`).then(
-    (res) => res.json()
-  );
-
-  const fetchMovieById = requests.fetchMovieById.url;
 
   return {
     props: {
-      highlighted: highlighted.results[0],
-      trending: trending.results,
-      comedy: comedy.results,
-      action: action.results,
-      horror: horror.results,
-      fetchMovieById: fetchMovieById,
+      highlighted: highlighted[1],
+      trending: trending,
+      comedy: comedy,
+      action: action,
+      horror: horror,
     },
   };
 }

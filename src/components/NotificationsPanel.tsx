@@ -3,7 +3,6 @@ import { useSession } from "next-auth/react";
 import React, { Fragment } from "react";
 import { MdNotificationsNone } from "react-icons/md";
 import { api } from "~/utils/api";
-import prisma from "~/utils/prismaClient";
 
 const NotificationsPanel: React.FC = () => {
   const user = useSession().data?.user;
@@ -13,17 +12,22 @@ const NotificationsPanel: React.FC = () => {
     });
   const [notificationsSeen, setNotificationsSeen] =
     React.useState<boolean>(true);
-  const { mutate: notificationMutate } = api.notification.create.useMutation();
   const { mutate: setAllNotificationsToSeenMutate } =
     api.notification.allNotificationByUserIdSeen.useMutation();
-  const { mutate: userFirstLoginMutate } =
-    api.user.updateFirstLogin.useMutation();
 
-  console.log(user);
+  function handlePopoverButtonClick() {
+    setAllNotificationsToSeenMutate({
+      userId: user?.id as string,
+    });
+    setNotificationsSeen(true);
+    setTimeout(() => {
+      refetchNotificationData();
+    }, 1500);
+  }
 
   React.useEffect(() => {
     setNotificationsSeen(true);
-    notificationData?.map((item, index) => {
+    notificationData?.map((item) => {
       if (item.seen === false) {
         setNotificationsSeen(false);
       }
@@ -37,15 +41,7 @@ const NotificationsPanel: React.FC = () => {
           <>
             <div className="flex items-center">
               <Popover.Button
-                onClick={() => {
-                  setAllNotificationsToSeenMutate({
-                    userId: user?.id as string,
-                  });
-                  setNotificationsSeen(true);
-                  setTimeout(() => {
-                    refetchNotificationData();
-                  }, 1500);
-                }}
+                onClick={handlePopoverButtonClick}
                 className="relative flex aspect-square h-full w-[40px] items-center justify-center rounded-full bg-[#202020]/90 backdrop-blur md:w-[36px]"
               >
                 {!notificationsSeen ? (

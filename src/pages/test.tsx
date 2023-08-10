@@ -9,11 +9,19 @@ import ResutsRow from "~/components/resultsRow/ResultsRow";
 import requests from "~/utils/requests";
 import { api } from "~/utils/api";
 
-const Test: NextPage = () => {
+const Test: NextPage = ({
+  highlighted,
+  trending,
+  action,
+  comedy,
+  horror,
+}: any) => {
   const { mutate: createNotificationMutate } =
     api.notification.create.useMutation();
   const [notificationValue, setNotificationValue] = React.useState("");
   const user = useSession().data?.user;
+
+  console.log(trending);
 
   return (
     <>
@@ -44,6 +52,15 @@ const Test: NextPage = () => {
           >
             Send
           </button>
+          <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube-nocookie.com/embed/1OzgPP4GzlY"
+            title="YouTube video player"
+            // frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          ></iframe>
         </div>
         <MobileBottomBar />
       </main>
@@ -52,3 +69,19 @@ const Test: NextPage = () => {
 };
 
 export default Test;
+
+export async function getServerSideProps() {
+  const { highlighted, trending, comedy, action, horror } = await fetch(
+    `${process.env.NEXTAUTH_URL}/api/fetchCategories`
+  ).then((res) => res.json());
+
+  return {
+    props: {
+      highlighted: highlighted[1],
+      trending: trending,
+      comedy: comedy,
+      action: action,
+      horror: horror,
+    },
+  };
+}

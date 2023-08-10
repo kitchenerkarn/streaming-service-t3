@@ -1,12 +1,8 @@
 import { type NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
 import React from "react";
 import Navbar from "~/components/navbar/Navbar";
 import MobileBottomBar from "~/components/mobileBottomBar/MobileBottomBar";
-import ResutsRow from "~/components/resultsRow/ResultsRow";
-import requests from "~/utils/requests";
 
 const MyList: NextPage = () => {
   return (

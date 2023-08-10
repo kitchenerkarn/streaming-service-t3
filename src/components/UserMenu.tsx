@@ -1,7 +1,7 @@
 import { Menu, Transition } from "@headlessui/react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import React, { Fragment } from "react";
 
 const UserMenu: React.FC = () => {
   const user = useSession().data?.user;
@@ -11,7 +11,6 @@ const UserMenu: React.FC = () => {
         <div className="flex items-center">
           <Menu.Button className="aspect-square w-[40px] overflow-hidden rounded-full bg-zinc-500 md:w-[36px]">
             <Image
-              // className="h-full w-full object-cover"
               src={user?.image as string}
               alt={user?.name as string}
               width={36}
@@ -19,7 +18,6 @@ const UserMenu: React.FC = () => {
               className="hidden md:inline-block"
             />
             <Image
-              // className="h-full w-full object-cover"
               src={user?.image as string}
               alt={user?.name as string}
               width={40}

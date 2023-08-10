@@ -1,16 +1,15 @@
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { MdSearch, MdNotificationsNone } from "react-icons/md";
+import { MdSearch } from "react-icons/md";
 import NotificationsPanel from "../NotificationsPanel";
 import UserMenu from "../UserMenu";
 
 const Navbar: React.FC = () => {
-  const user = useSession().data?.user;
   const [showBackground, setShowBackground] = React.useState(false);
 
   React.useEffect(() => {
+    // Adds background to navbar when user scrolls down
     window.addEventListener("scroll", () => {
       if (window.pageYOffset > 20) {
         setShowBackground(true);
@@ -26,6 +25,7 @@ const Navbar: React.FC = () => {
         showBackground ? "bg-[#181818]/95 backdrop-blur" : " bg-transparent"
       }`}
     >
+      {/* Navigation buttons */}
       <ul className="flex h-full items-center space-x-10">
         <li>
           <Link className="text-lg font-medium" href="/">

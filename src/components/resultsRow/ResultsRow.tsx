@@ -1,9 +1,10 @@
-import React, { HTMLAttributes, ReactElement, ReactHTMLElement } from "react";
-import ResultCard from "./ResultCard";
+import React from "react";
+import ResultCard, { ResultCardDataType } from "./ResultCard";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import { MovieItemType } from "~/types";
 
-interface ResultsRowProps extends React.HTMLAttributes<HTMLElement> {
-  results?: any;
+interface ResultsRowProps {
+  results?: Array<MovieItemType>;
   title: string;
   isMyList?: boolean;
 }
@@ -17,7 +18,29 @@ const ResutsRow: React.FC<ResultsRowProps> = ({
   const [showLeftArrow, setShowLeftArrow] = React.useState(false);
   const [showRightArrow, setShowRightArrow] = React.useState(true);
 
+  function LeftArrowNavigatorClick() {
+    resultsRef.current?.scrollTo({
+      left:
+        resultsRef?.current?.scrollLeft -
+        220 * (resultsRef?.current?.offsetWidth / 220) -
+        40,
+      behavior: "smooth",
+    });
+  }
+
+  function RightArrowNavigatorClick() {
+    resultsRef.current?.scrollTo({
+      left:
+        220 * (resultsRef?.current?.offsetWidth / 220) +
+        resultsRef?.current?.scrollLeft -
+        40,
+      behavior: "smooth",
+    });
+  }
+
   React.useEffect(() => {
+    // Changes the visibility of the arrow navigators
+    // based on how far the user is scrolled
     resultsRef.current?.addEventListener("scroll", (event) => {
       if (resultsRef?.current?.scrollLeft === 0) {
         setShowLeftArrow(false);
@@ -26,7 +49,6 @@ const ResutsRow: React.FC<ResultsRowProps> = ({
       }
     });
   }, []);
-  // console.log(resultsRef);
 
   return (
     <div className="relative flex w-full flex-col space-y-1">
@@ -37,15 +59,7 @@ const ResutsRow: React.FC<ResultsRowProps> = ({
         }`}
       >
         <div
-          onClick={() => {
-            resultsRef.current?.scrollTo({
-              left:
-                resultsRef?.current?.scrollLeft -
-                220 * (resultsRef?.current?.offsetWidth / 220) -
-                40,
-              behavior: "smooth",
-            });
-          }}
+          onClick={LeftArrowNavigatorClick}
           className="flex h-[300px] w-16 cursor-pointer items-center justify-center rounded-r-lg bg-zinc-800/70 transition"
         >
           <BsChevronLeft className="h-9 w-9 text-white" />
@@ -66,15 +80,7 @@ const ResutsRow: React.FC<ResultsRowProps> = ({
         }`}
       >
         <div
-          onClick={() => {
-            resultsRef.current?.scrollTo({
-              left:
-                220 * (resultsRef?.current?.offsetWidth / 220) +
-                resultsRef?.current?.scrollLeft -
-                40,
-              behavior: "smooth",
-            });
-          }}
+          onClick={RightArrowNavigatorClick}
           className="flex h-[300px] w-16 cursor-pointer items-center justify-center rounded-l-lg bg-zinc-800/70"
         >
           <BsChevronRight className="h-9 w-9 text-white" />

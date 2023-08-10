@@ -1,12 +1,10 @@
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-import Link from "next/link";
 import React from "react";
-import { MdSearch, MdNotificationsNone } from "react-icons/md";
+import { MdSearch } from "react-icons/md";
 import NotificationsPanel from "../NotificationsPanel";
 import UserMenu from "../UserMenu";
 
 const MobileBottomBar: React.FC = () => {
+  // Navigation bar that only appears for mobile screen sizes
   return (
     <nav className="fixed bottom-0 z-50 flex h-[70px] w-screen items-center justify-center bg-[#181818]/95 px-16 backdrop-blur transition duration-200 md:hidden md:justify-between">
       <ul className="flex h-full w-full items-center justify-between space-x-4">

@@ -2,8 +2,14 @@ import Image from "next/image";
 import React from "react";
 import { MdBookmarkBorder, MdBookmark } from "react-icons/md";
 
+export interface ResultCardDataType {
+  id: string;
+  poster_path: string;
+  title: string;
+}
+
 interface ResultCardProps extends React.HTMLAttributes<HTMLElement> {
-  data?: any;
+  data?: ResultCardDataType;
   isMyListPlaceholder?: boolean;
 }
 
@@ -11,7 +17,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
   data,
   isMyListPlaceholder = false,
 }) => {
-  const BASE_URL = "https://image.tmdb.org/t/p/original/";
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_THUBNAIL_URL;
   const [isImageLoading, setIsImageLoading] = React.useState<boolean>(true);
   const [isAddedToMyList, setIsAddedToMyList] = React.useState<boolean>(false);
 
@@ -59,10 +65,10 @@ const ResultCard: React.FC<ResultCardProps> = ({
               className="h-full w-full object-cover"
               height={300}
               width={200}
-              layout="responsive"
               src={`${BASE_URL}${data.poster_path}`}
               alt={data?.title}
               onLoadingComplete={() => setIsImageLoading(false)}
+              quality={20}
             />
           ) : null}
         </>
