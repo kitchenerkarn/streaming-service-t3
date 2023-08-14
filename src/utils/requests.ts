@@ -1,60 +1,74 @@
 const API_KEY = process.env.API_KEY;
+const API_URL = process.env.API_URL;
 
-interface RequestReturnType {
+export interface ReturnObjectItemType {
   title: string;
-  url:string
-}
-interface RequestReturnObjectType {
-  [key: string]: RequestReturnType
+  url: string;
 }
 
-export default {
+export type ReturnObjectKeys =
+  | "highlightedMovie"
+  | "fetchTrending"
+  | "fetchTopRated"
+  | "fetchActionMovies"
+  | "fetchComedyMovies"
+  | "fetchHorrorMovies"
+  | "fetchRomanceMovies"
+  | "fetchSciFi"
+  | "fetchWestern"
+  | "fetchAnimation"
+  | "fetchTV"
+  | "fetchMovieById";
+
+const requests: Record<ReturnObjectKeys, ReturnObjectItemType> = {
   highlightedMovie: {
     title: "Highlighted Movie",
-    url: `/trending/movie/day?api_key=${API_KEY}&language=en-US`,
+    url: `${API_URL}/trending/movie/day?api_key=${API_KEY}&language=en-US`,
   },
   fetchTrending: {
     title: "Trending",
-    url: `/trending/movie/week?api_key=${API_KEY}&language=en-US`,
+    url: `${API_URL}/trending/movie/week?api_key=${API_KEY}&language=en-US`,
   },
   fetchTopRated: {
     title: "Top Rated",
-    url: `/movie/top_rated?api_key=${API_KEY}&language=en-US`,
+    url: `${API_URL}/movie/top_rated?api_key=${API_KEY}&language=en-US`,
   },
   fetchActionMovies: {
     title: "Action",
-    url: `/discover/movie?api_key=${API_KEY}&with_genres=28`,
+    url: `${API_URL}/discover/movie?api_key=${API_KEY}&with_genres=28`,
   },
   fetchComedyMovies: {
     title: "Comedy",
-    url: `/discover/movie?api_key=${API_KEY}&with_genres=35`,
+    url: `${API_URL}/discover/movie?api_key=${API_KEY}&with_genres=35`,
   },
   fetchHorrorMovies: {
     title: "Horror",
-    url: `/discover/movie?api_key=${API_KEY}&with_genres=27`,
+    url: `${API_URL}/discover/movie?api_key=${API_KEY}&with_genres=27`,
   },
   fetchRomanceMovies: {
     title: "Romance",
-    url: `/discover/movie?api_key=${API_KEY}&with_genres=10749`,
+    url: `${API_URL}/discover/movie?api_key=${API_KEY}&with_genres=10749`,
   },
   fetchSciFi: {
     title: "Sci-Fi",
-    url: `/discover/movie?api_key=${API_KEY}&with_genres=878`,
+    url: `${API_URL}/discover/movie?api_key=${API_KEY}&with_genres=878`,
   },
   fetchWestern: {
     title: "Western",
-    url: `/discover/movie?api_key=${API_KEY}&with_genres=37`,
+    url: `${API_URL}/discover/movie?api_key=${API_KEY}&with_genres=37`,
   },
   fetchAnimation: {
     title: "Animation",
-    url: `/discover/movie?api_key=${API_KEY}&with_genres=16`,
+    url: `${API_URL}/discover/movie?api_key=${API_KEY}&with_genres=16`,
   },
   fetchTV: {
     title: "TV Movie",
-    url: `/discover/movie?api_key=${API_KEY}&with_genres=10770`,
+    url: `${API_URL}/discover/movie?api_key=${API_KEY}&with_genres=10770`,
   },
   fetchMovieById: {
     title: "TV Movie",
-    url: `/movie/movieId/?api_key=${API_KEY}&language=en-US`,
+    url: `${API_URL}/movie/movieId/?api_key=${API_KEY}&language=en-US`,
   },
-} as RequestReturnObjectType;
+};
+
+export default requests;
