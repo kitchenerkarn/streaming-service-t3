@@ -1,4 +1,4 @@
-import { type NextPage } from "next";
+import { InferGetServerSidePropsType, type NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
@@ -6,22 +6,31 @@ import React from "react";
 import Navbar from "~/components/navbar/Navbar";
 import MobileBottomBar from "~/components/mobileBottomBar/MobileBottomBar";
 import ResutsRow from "~/components/resultsRow/ResultsRow";
-import requests from "~/utils/requests";
+import requests, { ReturnObjectKeys } from "~/utils/requests";
 import { api } from "~/utils/api";
+import { MovieItemType } from "~/types";
 
-const Test: NextPage = ({
+interface getServerSidePropsDataType {
+  highlighted: MovieItemType;
+  trending: MovieItemType[];
+  action: MovieItemType[];
+  comedy: MovieItemType[];
+  horror: MovieItemType[];
+}
+
+const Test = ({
   highlighted,
   trending,
   action,
   comedy,
   horror,
-}: any) => {
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { mutate: createNotificationMutate } =
     api.notification.create.useMutation();
   const [notificationValue, setNotificationValue] = React.useState("");
   const user = useSession().data?.user;
 
-  console.log(trending);
+  console.log(highlighted);
 
   return (
     <>
@@ -71,13 +80,19 @@ const Test: NextPage = ({
 export default Test;
 
 export async function getServerSideProps() {
-  const { highlighted, trending, comedy, action, horror } = await fetch(
+  const {
+    highlighted,
+    trending,
+    comedy,
+    action,
+    horror,
+  }: getServerSidePropsDataType = await fetch(
     `${process.env.NEXTAUTH_URL}/api/fetchCategories`
   ).then((res) => res.json());
 
   return {
     props: {
-      highlighted: highlighted[1],
+      highlighted: highlighted,
       trending: trending,
       comedy: comedy,
       action: action,

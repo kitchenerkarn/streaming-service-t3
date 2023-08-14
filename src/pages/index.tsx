@@ -8,7 +8,7 @@ import ResutsRow from "~/components/resultsRow/ResultsRow";
 import { MovieItemType } from "~/types";
 
 interface getServerSidePropsDataType {
-  highlighted: MovieItemType[];
+  highlighted: MovieItemType;
   trending: MovieItemType[];
   action: MovieItemType[];
   comedy: MovieItemType[];
@@ -85,7 +85,7 @@ export async function getServerSideProps() {
 
   return {
     props: {
-      highlighted: highlighted[1],
+      highlighted: highlighted,
       trending: trending,
       comedy: comedy,
       action: action,
