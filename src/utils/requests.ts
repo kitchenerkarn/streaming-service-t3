@@ -1,5 +1,13 @@
 const API_KEY = process.env.API_KEY;
 
+interface RequestReturnType {
+  title: string;
+  url:string
+}
+interface RequestReturnObjectType {
+  [key: string]: RequestReturnType
+}
+
 export default {
   highlightedMovie: {
     title: "Highlighted Movie",
@@ -49,4 +57,4 @@ export default {
     title: "TV Movie",
     url: `/movie/movieId/?api_key=${API_KEY}&language=en-US`,
   },
-};
+} as RequestReturnObjectType;
