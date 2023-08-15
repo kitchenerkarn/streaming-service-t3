@@ -1,22 +1,17 @@
 import React from "react";
-import ResultCard, { ResultCardDataType } from "./ResultCard";
+import ResultCard from "./ResultCard";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
-import { MovieItemType } from "~/types";
+import type { MovieItemType } from "~/types";
 
 interface ResultsRowProps {
   results?: Array<MovieItemType>;
   title: string;
-  isMyList?: boolean;
 }
 
-const ResutsRow: React.FC<ResultsRowProps> = ({
-  results,
-  title,
-  isMyList = false,
-}) => {
+const ResutsRow: React.FC<ResultsRowProps> = ({ results, title }) => {
   const resultsRef = React.useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = React.useState(false);
-  const [showRightArrow, setShowRightArrow] = React.useState(true);
+  const [showRightArrow, _setShowRightArrow] = React.useState(true);
 
   function LeftArrowNavigatorClick() {
     resultsRef.current?.scrollTo({
@@ -41,7 +36,7 @@ const ResutsRow: React.FC<ResultsRowProps> = ({
   React.useEffect(() => {
     // Changes the visibility of the arrow navigators
     // based on how far the user is scrolled
-    resultsRef.current?.addEventListener("scroll", (event) => {
+    resultsRef.current?.addEventListener("scroll", () => {
       if (resultsRef?.current?.scrollLeft === 0) {
         setShowLeftArrow(false);
       } else {
@@ -69,10 +64,9 @@ const ResutsRow: React.FC<ResultsRowProps> = ({
         ref={resultsRef}
         className="hide-scrollbar scrol grid w-screen grid-flow-col gap-x-5 overflow-x-scroll px-8 py-4 md:px-16"
       >
-        {results?.map((item: any) => {
-          return <ResultCard data={item} />;
+        {results?.map((item) => {
+          return <ResultCard key={`resultcard:${item.id}`} data={item} />;
         })}
-        {!results ? <ResultCard isMyListPlaceholder={isMyList} /> : null}
       </div>
       <div
         className={`absolute right-0 top-0 z-10 hidden h-full items-end py-5 ${

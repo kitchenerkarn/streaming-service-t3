@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { MovieItemType } from "~/types";
-import requests, { ReturnObjectItemType } from "~/utils/requests";
+import type { MovieItemType } from "~/types";
+import requests, { type ReturnObjectItemType } from "~/utils/requests";
 
 interface RequestFetchDataType {
   page: number;

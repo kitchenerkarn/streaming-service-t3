@@ -1,14 +1,11 @@
-import { InferGetServerSidePropsType, type NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
+import type { InferGetServerSidePropsType } from "next";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
 import React from "react";
 import Navbar from "~/components/navbar/Navbar";
 import MobileBottomBar from "~/components/mobileBottomBar/MobileBottomBar";
-import ResutsRow from "~/components/resultsRow/ResultsRow";
-import requests, { ReturnObjectKeys } from "~/utils/requests";
 import { api } from "~/utils/api";
-import { MovieItemType } from "~/types";
+import type { MovieItemType } from "~/types";
 
 interface getServerSidePropsDataType {
   highlighted: MovieItemType;
@@ -54,10 +51,10 @@ const Test = ({
             onClick={() =>
               createNotificationMutate({
                 userId: user?.id as string,
-                content: notificationValue as string,
+                content: notificationValue,
               })
             }
-            className={`flex items-center justify-center rounded-md bg-[#2e2e2e] px-3 py-3 text-2xl md:py-[6px] md:text-base`}
+            className="flex items-center justify-center rounded-md bg-[#2e2e2e] px-3 py-3 text-2xl md:py-[6px] md:text-base"
           >
             Send
           </button>
@@ -80,23 +77,18 @@ const Test = ({
 export default Test;
 
 export async function getServerSideProps() {
-  const {
-    highlighted,
-    trending,
-    comedy,
-    action,
-    horror,
-  }: getServerSidePropsDataType = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/fetchCategories`
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const results: getServerSidePropsDataType = await fetch(
+    `${process.env.NEXTAUTH_URL as string}/api/fetchCategories`
   ).then((res) => res.json());
 
   return {
     props: {
-      highlighted: highlighted,
-      trending: trending,
-      comedy: comedy,
-      action: action,
-      horror: horror,
+      highlighted: results.highlighted,
+      trending: results.trending,
+      comedy: results.comedy,
+      action: results.action,
+      horror: results.horror,
     },
   };
 }

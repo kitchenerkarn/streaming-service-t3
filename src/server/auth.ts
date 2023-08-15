@@ -9,7 +9,7 @@ import GithubProvider from "next-auth/providers/github";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
-import { User } from "@prisma/client";
+// import { User } from "@prisma/client";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -49,8 +49,8 @@ export const authOptions: NextAuthOptions = {
         });
         await prisma.notification.create({
           data: {
-            content: `Welcome ${user?.name}`,
-            userId: user?.id as string,
+            content: "Welcome " + (user?.name as string),
+            userId: user?.id,
           },
         });
       }

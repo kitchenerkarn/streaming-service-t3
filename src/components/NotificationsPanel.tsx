@@ -21,7 +21,7 @@ const NotificationsPanel: React.FC = () => {
     });
     setNotificationsSeen(true);
     setTimeout(() => {
-      refetchNotificationData();
+      void refetchNotificationData();
     }, 1500);
   }
 

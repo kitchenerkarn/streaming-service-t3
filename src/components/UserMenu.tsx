@@ -5,6 +5,11 @@ import React, { Fragment } from "react";
 
 const UserMenu: React.FC = () => {
   const user = useSession().data?.user;
+
+  async function handleLogoutButtonClick() {
+    await signOut().catch((err) => console.error(err));
+  }
+
   return (
     <div className="flex items-center">
       <Menu as="div" className="md:relative">
@@ -51,7 +56,7 @@ const UserMenu: React.FC = () => {
               <Menu.Item>
                 {({ active }) => (
                   <button
-                    onClick={() => signOut()}
+                    onClick={void handleLogoutButtonClick}
                     className={`${
                       active ? "bg-red-500/80 text-white" : "text-white"
                     } group flex w-full items-center justify-center rounded-md px-2 py-3 text-2xl md:py-[6px] md:text-base`}

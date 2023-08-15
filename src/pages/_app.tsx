@@ -1,13 +1,12 @@
 import { type AppType } from "next/app";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import "~/styles/globals.css";
 import Head from "next/head";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
-import React, { Attributes, HTMLAttributes, ReactElement } from "react";
-import { prisma } from "~/server/db";
+import React from "react";
 import { api } from "~/utils/api";
 
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -46,14 +45,14 @@ const ProtectedRoute: React.FC<React.HTMLAttributes<HTMLElement>> = ({
           <main className="flex min-h-screen max-w-[100vw] flex-col items-center justify-center overflow-x-hidden">
             <div className="flex w-[250px] flex-col space-y-3">
               <button
-                onClick={() => signIn("google")}
+                onClick={() => void signIn("google")}
                 className="flex w-full items-center justify-center space-x-2 rounded-lg bg-[#2e2e2e] px-6 py-3"
               >
                 <FcGoogle className="h-6 w-6 text-white" />
                 <span>Login with Google</span>
               </button>
               <button
-                onClick={() => signIn("github")}
+                onClick={() => void signIn("github")}
                 className="flex w-full items-center justify-center space-x-2 rounded-lg bg-[#2e2e2e] px-6 py-3"
               >
                 <FaGithub className="h-6 w-6 text-white" />

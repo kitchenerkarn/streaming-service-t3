@@ -1,11 +1,10 @@
 import { type NextPage } from "next";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import Head from "next/head";
 import React from "react";
 import { FcGoogle } from "react-icons/fc";
 
 const Login: NextPage = () => {
-  const user = useSession().data?.user;
   return (
     <>
       <Head>
@@ -16,7 +15,7 @@ const Login: NextPage = () => {
       <main className="flex min-h-screen max-w-[100vw] flex-col items-center justify-center overflow-x-hidden">
         <div className="flex h-[250px] flex-col space-x-3">
           <button
-            onClick={() => signIn("google")}
+            onClick={() => void signIn("google")}
             className="flex w-full items-center space-x-2 rounded-lg bg-[#2e2e2e] px-6 py-3"
           >
             <FcGoogle className="h-6 w-6 text-white" />

@@ -3,7 +3,7 @@ import { z } from "zod";
 import {
   createTRPCRouter,
   publicProcedure,
-  protectedProcedure,
+  // protectedProcedure,
 } from "~/server/api/trpc";
 import { prisma } from "~/server/db";
 
@@ -13,7 +13,7 @@ export const userRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       return await prisma.user.update({
         where: {
-          id: input.userId as string,
+          id: input.userId,
         },
         data: {
           firstLogin: input.firstLogin,

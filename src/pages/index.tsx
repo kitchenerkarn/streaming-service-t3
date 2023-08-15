@@ -1,11 +1,10 @@
-import { InferGetServerSidePropsType } from "next";
-import { useSession } from "next-auth/react";
+import type { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import React from "react";
 import Navbar from "~/components/navbar/Navbar";
 import MobileBottomBar from "~/components/mobileBottomBar/MobileBottomBar";
 import ResutsRow from "~/components/resultsRow/ResultsRow";
-import { MovieItemType } from "~/types";
+import type { MovieItemType } from "~/types";
 
 interface getServerSidePropsDataType {
   highlighted: MovieItemType;
@@ -23,8 +22,6 @@ const Home = ({
   horror,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original/";
-  console.log(highlighted);
-
   return (
     <>
       <Head>
@@ -53,6 +50,7 @@ const Home = ({
             </div>
           </div>
           <img
+            alt={highlighted.title}
             className="-z-50 h-full w-full object-cover"
             src={`${BASE_IMAGE_URL}${highlighted?.backdrop_path}`}
           />
@@ -73,23 +71,18 @@ const Home = ({
 export default Home;
 
 export async function getServerSideProps() {
-  const {
-    highlighted,
-    trending,
-    comedy,
-    action,
-    horror,
-  }: getServerSidePropsDataType = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/fetchCategories`
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const results: getServerSidePropsDataType = await fetch(
+    `${process.env.NEXTAUTH_URL as string}/api/fetchCategories`
   ).then((res) => res.json());
 
   return {
     props: {
-      highlighted: highlighted,
-      trending: trending,
-      comedy: comedy,
-      action: action,
-      horror: horror,
+      highlighted: results.highlighted,
+      trending: results.trending,
+      comedy: results.comedy,
+      action: results.action,
+      horror: results.horror,
     },
   };
 }
