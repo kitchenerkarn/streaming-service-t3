@@ -8,7 +8,7 @@ import { api } from "~/utils/api";
 import type { MovieItemType } from "~/types";
 
 interface getServerSidePropsDataType {
-  highlighted: MovieItemType;
+  highlighted: MovieItemType[];
   trending: MovieItemType[];
   action: MovieItemType[];
   comedy: MovieItemType[];
@@ -84,7 +84,7 @@ export async function getServerSideProps() {
 
   return {
     props: {
-      highlighted: results.highlighted,
+      highlighted: results.highlighted[0],
       trending: results.trending,
       comedy: results.comedy,
       action: results.action,

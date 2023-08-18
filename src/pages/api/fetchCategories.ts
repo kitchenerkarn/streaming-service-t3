@@ -25,9 +25,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const highlighted = await fetchCategory(requests.highlightedMovie);
   const results = {
-    highlighted: highlighted?.[0],
+    highlighted: await fetchCategory(requests.highlightedMovie),
     trending: await fetchCategory(requests.fetchTrending),
     action: await fetchCategory(requests.fetchActionMovies),
     comedy: await fetchCategory(requests.fetchComedyMovies),

@@ -7,7 +7,7 @@ import ResutsRow from "~/components/resultsRow/ResultsRow";
 import type { MovieItemType } from "~/types";
 
 interface getServerSidePropsDataType {
-  highlighted: MovieItemType;
+  highlighted: MovieItemType[];
   trending: MovieItemType[];
   action: MovieItemType[];
   comedy: MovieItemType[];
@@ -50,7 +50,7 @@ const Home = ({
             </div>
           </div>
           <img
-            alt={highlighted.title}
+            alt={highlighted?.title}
             className="-z-50 h-full w-full object-cover"
             src={`${BASE_IMAGE_URL}${highlighted?.backdrop_path}`}
           />
@@ -78,7 +78,7 @@ export async function getServerSideProps() {
 
   return {
     props: {
-      highlighted: results.highlighted,
+      highlighted: results.highlighted?.[0],
       trending: results.trending,
       comedy: results.comedy,
       action: results.action,
