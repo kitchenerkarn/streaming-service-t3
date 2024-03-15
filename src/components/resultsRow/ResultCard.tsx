@@ -45,7 +45,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ data }) => {
       </div>
       {data ? (
         <Image
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover select-none"
           height={300}
           width={200}
           src={`${BASE_URL as string}${data.poster_path}`}
