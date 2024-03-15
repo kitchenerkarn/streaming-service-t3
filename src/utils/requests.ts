@@ -1,5 +1,5 @@
-const API_KEY = process.env.API_KEY;
-const API_URL = process.env.API_URL;
+const API_KEY = process.env.API_KEY || "";
+const API_URL = process.env.API_URL || "";
 
 export interface ReturnObjectItemType {
   title: string;

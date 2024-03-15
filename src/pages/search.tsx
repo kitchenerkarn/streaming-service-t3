@@ -12,7 +12,7 @@ const Search: NextPage = () => {
     	function handleSearchInputOnChange({currentTarget}: React.ChangeEvent<HTMLInputElement>) {
 		console.log(router.query?.["q"])
 		router.query.q = "cunt"
-		router.replace({
+		return router.replace({
 			query: {...router.query, q: currentTarget.value}
 		})
 	}
@@ -27,8 +27,8 @@ const Search: NextPage = () => {
       <main className="mt-[70px] flex min-h-[calc(100vh-70px)] flex-col items-center justify-start overflow-x-hidden">
         <Navbar />
         <div className="flex flex-col w-[60%] mt-5 space-y-4">
-          <input className="placeholder:text-black text-black px-3 py-2 outline-none" onChange={handleSearchInputOnChange} />
-	  <span className="text-xl">Search for: "{searchQuery ? searchQuery : " "}"</span>
+          <input className="placeholder:text-black text-black px-3 py-2 outline-none" onChange={void handleSearchInputOnChange} />
+	  <span className="text-xl">Search for: &quot;{searchQuery}&quot;</span>
         </div>
         <MobileBottomBar />
       </main>

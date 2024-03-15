@@ -52,7 +52,7 @@ const Home = ({
           <img
             alt={highlighted?.title}
             className="-z-50 h-full w-full object-cover select-none"
-            src={`${BASE_IMAGE_URL}${highlighted?.backdrop_path}`}
+            src={`${BASE_IMAGE_URL}${highlighted ? highlighted.backdrop_path : ""}`}
           />
         </section>
         <section className="mb-40 mt-[-10vh] flex flex-col space-y-10 overflow-y-hidden md:mt-[-7vh]">
